@@ -14,7 +14,7 @@ namespace HeadlessModeAndRestSharp
     class RestSharp
     {
         RestClient restClient = new RestClient("https://greencity.azurewebsites.net");
-       private readonly string commentId;
+       private string commentId;
         public string getAccessToken()
         {
             RestClient ownSecurityClient = new RestClient("https://greencity-user.azurewebsites.net");
@@ -37,8 +37,12 @@ namespace HeadlessModeAndRestSharp
             request.AddHeader("Authorization", "Bearer " + accessToken);
             request.AddParameter("application/json", commentData, ParameterType.RequestBody);
             IRestResponse restResponse = restClient.Execute(request);
-            //write code, i should get comment id
-            Assert.AreEqual(restResponse.StatusCode, HttpStatusCode.Created);
+            // get comment id
+            Regex regex = new Regex("\"id\":(\\d*),\"name");
+            Match match = regex.Match(restResponse.Content);
+            commentId = match.Groups[1].Value;
+            //
+            Assert.AreEqual(HttpStatusCode.Created, restResponse.StatusCode);
         }
 
         [Test]
@@ -51,7 +55,9 @@ namespace HeadlessModeAndRestSharp
             request.AddHeader("Authorization", "Bearer " + accessToken);
             request.AddParameter("application/json", commentData, ParameterType.RequestBody);
             IRestResponse restResponse = restClient.Execute(request);
-            Assert.AreEqual(restResponse.StatusCode, HttpStatusCode.Created);
+            Console.WriteLine(restResponse.Content);
+            Console.WriteLine(commentId);
+            Assert.AreEqual(HttpStatusCode.OK, restResponse.StatusCode);
         }
     }
 }
