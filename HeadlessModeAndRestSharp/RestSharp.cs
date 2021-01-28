@@ -1,12 +1,7 @@
 ﻿using NUnit.Framework;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HeadlessModeAndRestSharp
 {
@@ -37,8 +32,8 @@ namespace HeadlessModeAndRestSharp
             request.AddHeader("Authorization", "Bearer " + accessToken);
             request.AddParameter("application/json", commentData, ParameterType.RequestBody);
             IRestResponse restResponse = restClient.Execute(request);
-            // get comment id
-            Regex regex = new Regex("\"id\":(\\d*),\"name");
+            // get comment id          
+            Regex regex = new Regex("\"id\":(\\d*),\"author");
             Match match = regex.Match(restResponse.Content);
             commentId = match.Groups[1].Value;
             //
@@ -49,14 +44,10 @@ namespace HeadlessModeAndRestSharp
         public void deleteComment()
         {
             string accessToken = getAccessToken();
-            JsonObject commentData = new JsonObject();
-            commentData.Add("id", commentId);
             var request = new RestRequest("/econews/comments", Method.DELETE);
             request.AddHeader("Authorization", "Bearer " + accessToken);
-            request.AddParameter("application/json", commentData, ParameterType.RequestBody);
+            request.AddQueryParameter("id", commentId);
             IRestResponse restResponse = restClient.Execute(request);
-            Console.WriteLine(restResponse.Content);
-            Console.WriteLine(commentId);
             Assert.AreEqual(HttpStatusCode.OK, restResponse.StatusCode);
         }
     }
