@@ -26,7 +26,7 @@ namespace HeadlessModeAndRestSharp
             return match.Groups[1].Value;
         }
 
-        [Test]
+        [Test, Order(1)]
         public void createComment()
         {
             string accessToken = getAccessToken();
@@ -45,7 +45,7 @@ namespace HeadlessModeAndRestSharp
             Assert.AreEqual(HttpStatusCode.Created, restResponse.StatusCode);
         }
 
-        [Test]
+        [Test, Order(2)]
         public void deleteComment()
         {
             string accessToken = getAccessToken();
