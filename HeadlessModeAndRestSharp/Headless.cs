@@ -32,7 +32,7 @@ namespace HeadlessModeAndRestSharp
         [Test]
         public void test()
         {
-            IWebElement cityField = driver.FindElement(By.Id("cityField"));//*[@id='cityField']
+            IWebElement cityField = driver.FindElement(By.Id("cityField"));
             cityField.Click();
             IWebElement regions = driver.FindElement(By.Id("regions-layer"));
             Assert.IsTrue(regions.Displayed);
