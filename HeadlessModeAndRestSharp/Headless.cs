@@ -18,7 +18,7 @@ namespace HeadlessModeAndRestSharp
         public void beforeTest()
         {
             ChromeOptions options = new ChromeOptions();
-            //options.AddArgument("--headless");
+            options.AddArgument("--headless");
             driver = new ChromeDriver(options);
             driver.Url = "https://www.olx.ua/";
         }
@@ -32,7 +32,8 @@ namespace HeadlessModeAndRestSharp
         [Test]
         public void test()
         {
-            IWebElement cityField = driver.FindElement(By.Id("cityField"));
+            IWebElement cityField = driver.FindElement(By.XPath("//*[@id='cityField']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", cityField);
             cityField.Click();
             IWebElement regions = driver.FindElement(By.Id("regions-layer"));
             Assert.IsTrue(regions.Displayed);
